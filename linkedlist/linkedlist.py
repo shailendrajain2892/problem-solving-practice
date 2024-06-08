@@ -27,14 +27,14 @@ class LinkedList:
             while(tmp.next!=None):
                 tmp = tmp.next
             # print(f"inserting {node.data} at the end")
-            tmp.next = node
+            tmp.next = node # type: ignore
 
     def insertAtBeg(self, value) -> None: 
         node = Node(value)
         if self.head == None:
             self.head = node
         else:
-            node.next = self.head
+            node.next = self.head # type: ignore
             self.head = node
     
     def insertAtK(self, value, k) -> None:
@@ -66,18 +66,18 @@ class LinkedList:
         slow=self.head
         fast=self.head
         for _ in range(k):
-            fast=fast.next
+            fast=fast.next # type: ignore
         while(fast!=None):
-            slow=slow.next
+            slow=slow.next # type: ignore
             fast=fast.next
-        return slow.data
+        return slow.data # type: ignore
     
     def detect_loop_change_ref(self) -> bool: #approach 1
         tmp = Node(0)
         curr = self.head
         while(curr!=None and curr.next!=tmp):
             tmp2=curr.next
-            curr.next=tmp
+            curr.next=tmp # type: ignore
             curr=tmp2
         if curr==None:
             return False
@@ -87,7 +87,7 @@ class LinkedList:
         slow=self.head
         fast=self.head
         while(fast!=None and fast.next!=None):
-            slow=slow.next
+            slow=slow.next # type: ignore
             fast=fast.next.next
             if slow==fast:
                 return True
@@ -99,7 +99,7 @@ class LinkedList:
         tmp=None
         while(curr != None):
             tmp=curr.next
-            curr.next=prev
+            curr.next=prev # type: ignore
             prev=curr
             curr=tmp
         self.head=prev
