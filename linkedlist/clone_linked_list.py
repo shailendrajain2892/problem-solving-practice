@@ -23,11 +23,42 @@ def clone_link_list(ll):
 
     return head
 
+def clone_linked_list_with_tempNode(ll):
+    curr = ll
+    # insert node between nodes 
+    while(curr!=None):
+        node = Node(curr.data)
+        node.next=curr.next
+        curr.next = node
+        curr=node.next
 
+    # assign the random pointer for new nodes
+    curr=ll
+    while(curr!=None):
+        curr.next.random = curr.random
+        curr=curr.next.next
+    
+    # now separate the linked list
+    original = ll
+    copy = ll.next
+    head2 = copy
+    while(original!=None and copy!=None):
+        # change the ref of next pointer 
+        original.next = copy.next
+        copy.next = original.next.next if original.next else None
+        # move the pointer to next node
+        original = original.next
+        copy = copy.next
+    
 
+    printLinkedList(head2)
+    
 def printLinkedList(tmp):
     while(tmp!=None):
-        print(f"Node| {tmp.data} |random |--> {tmp.random.data}")
+        if tmp.random:
+            print(f"Node| {tmp.data} |random |--> {tmp.random.data}")
+        else:
+            print(f"Node| {tmp.data} ")
         tmp=tmp.next
         
 def main():
@@ -47,8 +78,10 @@ def main():
     tmp = node
     print(f"Original Linked List: ")
     printLinkedList(tmp)
-    cloned_linked_list = clone_link_list(node)
-    print(f"Cloned linked list: ")
-    printLinkedList(cloned_linked_list)
+    # cloned_linked_list = clone_link_list(node)
+    # print(f"Cloned linked list: ")
+    # printLinkedList(cloned_linked_list)
+    print(f"cloned linked list using temp node in between")
+    clone_linked_list_with_tempNode(node)
 
 main()
