@@ -197,7 +197,7 @@ class BinaryTree:
             return inorder_traversal(node.right, k, count, result)
     
         _, result = inorder_traversal(root, k, 0, None)
-        return result
+        return result # type: ignore
         
     def validateBinaryTree(self, root, prev=float('-inf'), result=True):
         if not root: 
@@ -214,6 +214,31 @@ class BinaryTree:
 
         # visit right subtree
         return self.validateBinaryTree(root.right, prev, result)        
+    
+    def validateBinaryTreeO(self, root, min_val=float('-inf'), max_val=float('inf')):
+        if not root:
+            return True
+        
+        return root.key>min_val and root.key<max_val and \
+                self.validateBinaryTreeO(root.left, min_val, root.key) and \
+                self.validateBinaryTreeO(root.right, root.key, max_val)
+    
+    def pairSum(self, root:Node, sm:int) -> bool:
+        def inorder_traversal(root, sm, nodes=[], result=False):
+            if not root:
+                return sm, nodes, result
+            
+            sm, nodes, result = inorder_traversal(root.left, sm, nodes, result)
+
+            if (sm-root.key) in nodes:
+                result = True
+                return sm, nodes, result
+            else:
+                nodes.append(root.key)
+            
+            return inorder_traversal(root.right, sm, nodes, result)
+        _, _, result = inorder_traversal(root, sm)
+        return result
     
 def main():
     node = Node(12)
@@ -250,11 +275,13 @@ def main():
     # root_node = bt.BinarySearchInsertion(root_node, 7)
     # root_node = bt.BinarySearchDeletion(root_node, 12)
     # bt.InOrderTraversal(root_node)
-    print(f"{bt.in_order_trav}")
-    bt.kSmallElement(node, 3)
-    print(bt.kSmallElement2(node, 4))
+    # print(f"{bt.in_order_trav}")
+    print(f" 3rd smallest element in bt : {bt.kSmallElement(node, 3)}")
+    print(f"4th smallest element in bt : {bt.kSmallElement2(node, 4)}")
     _, result = bt.validateBinaryTree(node)
     print(result)
+    print(f"Given Tree is binary tree : {bt.validateBinaryTreeO(node)}")
+    print(f"Pair Sum exist : {bt.pairSum(node, 19)}")
 
 
 
