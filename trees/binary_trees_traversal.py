@@ -14,6 +14,7 @@ class BinaryTree:
         self.in_order_trav = []
         self.bfs = []
         self.preindex = 0
+        self.count=0
 
     def PreOrderTraversal(self, node):
         if node == None:
@@ -116,8 +117,8 @@ class BinaryTree:
                 middleI = idx
                 break
         
-        root.left = self.createTreeFromInOrderAndPreOrder(inorder, preorder, startingI, middleI-1)
-        root.right = self.createTreeFromInOrderAndPreOrder(inorder, preorder, middleI+1, endingI)
+        root.left = self.createTreeFromInOrderAndPreOrder(inorder, preorder, startingI, middleI-1) # type: ignore
+        root.right = self.createTreeFromInOrderAndPreOrder(inorder, preorder, middleI+1, endingI) # type: ignore
         return root
     
     def BinarySearch(self, root, key):
@@ -129,13 +130,98 @@ class BinaryTree:
             return self.BinarySearch(root.right, key)
         else:
             return self.BinarySearch(root.left, key)
+        
+    def BinarySearchInsertion(self, root, key):
+        if root == None:
+            node = Node(key)
+            return node
+        if key > root.key:
+            root.right = self.BinarySearchInsertion(root.right, key)
+        else:
+            root.left =  self.BinarySearchInsertion(root.left, key)
+        return root
+    
+    def getSucc(self, root):
+        tmp = root
+        if tmp == None:
+            return root
+        tmp = tmp.right
+        while(tmp != None and tmp.left != None):
+            tmp = tmp.left
+        return tmp
+    
+    def BinarySearchDeletion(self, root, key):
+        if root == None: 
+            return root
+        if key > root.key:
+            root.right = self.BinarySearchDeletion(root.right, key)
+        elif key < root.key:
+            root.left = self.BinarySearchDeletion(root.left, key)
+        else:
+            if root.left == None:
+                temp = root.right
+                del root.right
+                return temp
+            elif root.right == None:
+                temp = root.left
+                del root
+                return temp
+            else:
+                node = self.getSucc(root)
+                root.key = node.key
+                root.right = self.BinarySearchDeletion(root.right, node.key)
+        return root
+
+    def kSmallElement(self, root, k, count=0):
+        if root == None:
+            return 
+        self.kSmallElement(root.left, k, count)
+        self.count+=1
+        if self.count == k:
+            print(root.key)
+        self.kSmallElement(root.right, k, count)
+    
+    def kSmallElement2(self, root: Node, k: int) -> int:
+        def inorder_traversal(node, k, count, result):
+            if not node: 
+                return count, result
+            
+            count, result = inorder_traversal(node.left, k, count, result)   
+
+            #visit the node
+            count+=1
+            if count == k:
+                result = node.key
+                return count, result
+            
+            return inorder_traversal(node.right, k, count, result)
+    
+        _, result = inorder_traversal(root, k, 0, None)
+        return result
+        
+    def validateBinaryTree(self, root, prev=float('-inf'), result=True):
+        if not root: 
+            return prev, result
+        # visit left subtree
+        prev, result =  self.validateBinaryTree(root.left, prev, result)
+
+        # check parent node with prev node 
+        if prev > root.key:
+            result = False
+            return prev, result
+        else:
+            prev = root.key
+
+        # visit right subtree
+        return self.validateBinaryTree(root.right, prev, result)        
+    
 def main():
     node = Node(12)
-    node.left = Node(8)
-    node.right = Node(16)
-    node.left.left = Node(3)
-    node.right.left = Node(13)
-    node.right.right = Node(18)
+    node.left = Node(8) # type: ignore
+    node.right = Node(16) # type: ignore
+    node.left.left = Node(3) # type: ignore
+    node.right.left = Node(13) # type: ignore
+    node.right.right = Node(18) # type: ignore
     bt = BinaryTree()
     print(f"Pre Order Traversal: ")
     bt.PreOrderTraversal(node)
@@ -144,19 +230,32 @@ def main():
     bt.PostOrderTraversal(node)
     print(bt.post_order_trav)
     print(f"In Order Traversal:")
-    bt.InOrderTraversal(node)
-    print(bt.in_order_trav)
+    # bt.InOrderTraversal(node)
+    # print(bt.in_order_trav)
     bt.BFS(node)
     print(f"BFS: {bt.bfs}")
     bt.level_order_trav_by_level(node)
     print(f"Size of BST : {bt.sizeOfBST(node)}")
     print(f"Height of BST : {bt.heightOfBST(node)}")
     print(f"Max element in BST : {bt.maxElementR(node)}")
-    inorder = [40,20,60,50,70,10,80,100,30]
-    preorder = [10,20,40,50,60,70,30,80,100]
-    btTree = bt.createTreeFromInOrderAndPreOrder(inorder, preorder, 0, len(inorder)-1)
-    print(f"Binary Tree Construction: {bt.InOrderTraversal(btTree)}")
-    print(f"{bt.in_order_trav}")
+    # inorder = [40,20,60,50,70,10,80,100,30]
+    # preorder = [10,20,40,50,60,70,30,80,100]
+    # btTree = bt.createTreeFromInOrderAndPreOrder(inorder, preorder, 0, len(inorder)-1)
+    # print(f"Binary Tree Construction: {bt.InOrderTraversal(btTree)}")
+    # print(f"{bt.in_order_trav}")
     print(bt.BinarySearch(node, 13))
+    # print("Adding 14 to the Binary Search Tree...")
+    # root_node = bt.BinarySearchInsertion(node, 14)
+    # print("Adding 7 to Binary Search Tree...")
+    # root_node = bt.BinarySearchInsertion(root_node, 7)
+    # root_node = bt.BinarySearchDeletion(root_node, 12)
+    # bt.InOrderTraversal(root_node)
+    print(f"{bt.in_order_trav}")
+    bt.kSmallElement(node, 3)
+    print(bt.kSmallElement2(node, 4))
+    _, result = bt.validateBinaryTree(node)
+    print(result)
+
+
 
 main()
