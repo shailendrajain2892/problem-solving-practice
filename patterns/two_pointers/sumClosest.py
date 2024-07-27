@@ -19,6 +19,6 @@ class Solution:
                 if diff < minDiff:
                     r = sm
                     minDiff = diff
-        return r if r != float('inf') else 0
+        return r if r != float('inf') else 0 # type: ignore
 
 print(Solution().threeSumClosest([-1,-1,-1,-1,-1], 5))
