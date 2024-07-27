@@ -47,7 +47,7 @@ def subarraySumCountOptimal(nums,k):
                 prefixSumCount[prefixSum]=1
     return rcount
 
-nums=[1,-1,1,1,1]
+nums=[0,1,1,1,0,1,1,1]
 k = 2
 print(subarraySumCountBrute(nums,k))
 print(subarraySumCountBetter(nums,k))
