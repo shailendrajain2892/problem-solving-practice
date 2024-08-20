@@ -121,6 +121,42 @@ def pairSum(root, targetSum, diffList = None) -> bool:
     return pairSum(root.right, targetSum, diffList)
 
 
+def binaryTreePaths( root):
+    def dfs(node, path, paths):
+        if node:
+            # Add the current node's value to the path
+            path += str(node.val)
+            
+            # If it's a leaf, add the path to the list of paths
+            if not node.left and not node.right:
+                paths.append(path)
+            else:
+                # Continue the path with '->' and explore left and right children
+                path += "->"
+                dfs(node.left, path, paths)
+                dfs(node.right, path, paths)
+
+    paths = []
+    dfs(root, "", paths)
+    return paths
+
+def BinaryTreePathMaxSum(root):
+
+    maxPathSum = float('-inf')
+    def dfs(root):
+        nonlocal maxPathSum
+        if not root:
+            return 0
+        leftMax = max(dfs(root.left), 0)
+        rightMax = max(dfs(root.right), 0)
+
+        maxPathSum = max(maxPathSum, root.val + leftMax + rightMax)
+
+        return root.val + max(leftMax, rightMax)
+
+    dfs(root)
+    return maxPathSum
+
 def main():
     root = Node(15)
     root.left = Node(5)
@@ -152,5 +188,7 @@ def main():
     print(f"Check BST : {checkBST(Node(5))}")
     print(f"Check BST Range : {checkBSTRange(Node(6))}")
     print(f"Pair Sum Exist : {pairSum(root, 10)}")
+    print(f"Binary Tree Path : {binaryTreePaths(root)}")
+    print(f"Binary Tree Path Sum: {BinaryTreePathMaxSum(root)}")
 
 main()

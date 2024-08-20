@@ -51,6 +51,22 @@ class MinHeap:
             self.heapify_down(smallest)
 
 
+    def delete(self, element):
+        try:
+            index = self.heap.index(element)
+            
+            # swap with last element
+            self.heap[index] = self.heap[-1]
+            # remove it by popping 
+            self.heap.pop()
+            if index < self.size():
+                self.heapify_up(index)
+                self.heapify_down(index)
+        except:
+            raise ValueError("Key not found in Heap")
+        
+
+
     def get_min(self):
         if len(self.heap) == 0:
             return None
@@ -64,15 +80,16 @@ class MinHeap:
 
 def main():
     heap = MinHeap()
-    heap.insert(3)
-    heap.insert(1)
-    heap.insert(6)
-    heap.insert(5)
-    heap.insert(2)
-    heap.insert(4)
+    nums = [20, 8, 7, 15, 19, 4, 17]
+    for n in nums:
+        heap.insert(n)
+    
+    print(heap.heap)
 
     print(heap.get_min())  # Output: 1
-    print(heap.remove_min())  # Output: 1
-    print(heap.get_min())  # Output: 2
+    # print(heap.remove_min())  # Output: 1
+    # print(heap.get_min())  # Output: 2
+    heap.delete(4)
+    print(f"Heap after deletion : {heap.heap}")
 
 main()
