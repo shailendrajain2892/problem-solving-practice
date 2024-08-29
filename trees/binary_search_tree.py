@@ -157,6 +157,27 @@ def BinaryTreePathMaxSum(root):
     dfs(root)
     return maxPathSum
 
+class Solution:
+    def pathSum(self, root, targetSum: int) -> list[list[int]]:
+        def dfs(root, path, paths, remainingSum):
+            if not root:
+                return 0
+            
+            path.append(root.val)
+
+            if not root.left and not root.right:
+                if remainingSum == root.val:
+                    paths.append(list(path))
+            
+            dfs(root.left, path, paths, remainingSum-root.val)
+            dfs(root.right, path, paths, remainingSum-root.val)
+            path.pop()
+
+        paths = [] 
+        dfs(root, [], paths, targetSum)
+        return paths
+    
+
 def main():
     root = Node(15)
     root.left = Node(5)
@@ -190,5 +211,6 @@ def main():
     print(f"Pair Sum Exist : {pairSum(root, 10)}")
     print(f"Binary Tree Path : {binaryTreePaths(root)}")
     print(f"Binary Tree Path Sum: {BinaryTreePathMaxSum(root)}")
+    print(f"Path for given sum : {Solution().pathSum(root, 69)}")
 
 main()
