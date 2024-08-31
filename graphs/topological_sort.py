@@ -3,6 +3,7 @@ from queue import Queue
 
 def topological_sort(graph):
     sorted_list = []
+    count = 0
 
     # crate queue to store nodes
     queue = Queue()
@@ -23,6 +24,7 @@ def topological_sort(graph):
 
     # now process the nodes in the queue using BFS
     while not queue.empty():
+        count+=1
         current_node = queue.get()
         sorted_list.append(current_node)
         for adj_node in graph[current_node]:
@@ -39,4 +41,11 @@ graph = {
     3: [],
     4: []
 }
-print(topological_sort(graph))
+dag_graph_cycle = {
+    0: [1],
+    1: [3],
+    2: [1],
+    3: [4],
+    4: [1]
+}
+print(topological_sort(dag_graph_cycle))
