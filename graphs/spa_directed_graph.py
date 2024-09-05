@@ -1,5 +1,5 @@
 from collections import defaultdict, deque
-
+    
 def topological_sort(graph):
     indegree = {node: 0 for node in graph}
     
