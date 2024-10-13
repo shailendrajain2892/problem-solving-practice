@@ -1,3 +1,8 @@
+from typing import Optional
+
+from patterns.binary_search.balanced_binary_tree import TreeNode
+
+
 class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         prev = float('-inf')  # Keeps track of the previous node value in in-order traversal

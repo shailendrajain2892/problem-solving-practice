@@ -25,6 +25,6 @@ class Solution:
             res.append(levels)
         return res
 
-Solution().levelOrder()
+
             
         
