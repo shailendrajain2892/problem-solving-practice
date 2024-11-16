@@ -2,7 +2,7 @@ from collections import Counter
 import heapq
 from typing import List
 class Solution:
-    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]: # type: ignore
         counter = Counter(nums)
         res = []
         freqMap = [[] for i in range(len(nums)+1)]
